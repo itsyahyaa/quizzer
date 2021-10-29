@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'question.dart';
+import 'quiz.dart';
+
+Quizbrain quiz = Quizbrain();
 
 void main() => runApp(Quizzler());
 
@@ -27,18 +29,13 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> storekepper = [];
-  List<String> question = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.',
-  ];
-  List<Question> questionBank = [
-    Question(q: 'You can lead a cow down stairs but not up stairs.', a: false),
-    Question(q: 'Approximately one quarter of human bones are in the feet.',
-        a: true),
-    Question(q: 'A slug\'s blood is green.', a: true),
-  ];
-  List<bool> answer = [false, true, true];
+  // List<String> question = [
+  //   'You can lead a cow down stairs but not up stairs.',
+  //   'Approximately one quarter of human bones are in the feet.',
+  //   'A slug\'s blood is green.',
+  // ];
+
+  // List<bool> answer = [false, true, true];
   int questionNumber = 0;
 
   @override
@@ -53,7 +50,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questionBank[questionNumber].questionText,
+                quiz.getQuestionText(questionNumber),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -79,8 +76,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  bool correctanswer =
-                      questionBank[questionNumber].questionAn;
+                  bool correctanswer = quiz.getQuestionAn(questionNumber);
                   if (correctanswer == true) {
                     storekepper.add(
                       Icon(Icons.check, color: Colors.green),
@@ -116,7 +112,7 @@ class _QuizPageState extends State<QuizPage> {
                 //The user picked false.
                 setState(() {
                   bool correctanswer =
-                      questionBank[questionNumber].questionAn;
+                      quiz.getQuestionAn(questionNumber);
                   if (correctanswer == false) {
                     storekepper.add(
                       Icon(Icons.check, color: Colors.green),
