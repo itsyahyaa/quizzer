@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz.dart';
 
 Quizbrain quiz = Quizbrain();
@@ -29,14 +30,31 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> storekepper = [];
-  // List<String> question = [
-  //   'You can lead a cow down stairs but not up stairs.',
-  //   'Approximately one quarter of human bones are in the feet.',
-  //   'A slug\'s blood is green.',
-  // ];
-
-  // List<bool> answer = [false, true, true];
-  int questionNumber = 0;
+  void checkAnswer(bool check) {
+    setState(() {
+      bool correctanswer = quiz.getQuestionAn();
+      if (quiz.isFinished() == true) {
+        Alert(
+          context: context,
+          title: 'Finished!',
+          desc: 'You\'ve reached the end of the quiz.',
+        ).show();
+        quiz.reSet();
+        storekepper = [];
+      } else {
+        if (correctanswer == check) {
+          storekepper.add(
+            Icon(Icons.check, color: Colors.green),
+          );
+        } else {
+          storekepper.add(
+            Icon(Icons.close, color: Colors.red),
+          );
+        }
+        quiz.getQuizNumber();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +68,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quiz.getQuestionText(questionNumber),
+                quiz.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -75,21 +93,7 @@ class _QuizPageState extends State<QuizPage> {
                 backgroundColor: Colors.green[900],
               ),
               onPressed: () {
-                setState(() {
-                  bool correctanswer = quiz.getQuestionAn(questionNumber);
-                  if (correctanswer == true) {
-                    storekepper.add(
-                      Icon(Icons.check, color: Colors.green),
-                    );
-                    print('you got it right');
-                  } else {
-                    storekepper.add(
-                      Icon(Icons.close, color: Colors.red),
-                    );
-                    print('you got it wrong');
-                  }
-                  questionNumber += 1;
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -110,22 +114,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                setState(() {
-                  bool correctanswer =
-                      quiz.getQuestionAn(questionNumber);
-                  if (correctanswer == false) {
-                    storekepper.add(
-                      Icon(Icons.check, color: Colors.green),
-                    );
-                    print('you got it right');
-                  } else {
-                    storekepper.add(
-                      Icon(Icons.close, color: Colors.red),
-                    );
-                    print('you got it wrong');
-                  }
-                  questionNumber += 1;
-                });
+                checkAnswer(false);
               },
             ),
           ),
